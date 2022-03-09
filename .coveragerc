@@ -1,0 +1,19 @@
+[run]
+
+omit = /myvenv/,
+        *myvenv*,
+        *config*,
+        *__init__.py*,
+        *migration*,
+        *test*,
+        *connect_db*,
+        *fields*,
+        *model_base*,
+        *create_table*,
+        *tutorial/spiders/__init__.py*,
+        *tutorial/__init__.py*,
+        *tests/test_parser.py*,
+        *tests/responses/__init__.py*,
+[report]
+fail_under = 95
+precision = 2
