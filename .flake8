@@ -1,0 +1,15 @@
+[flake8]
+
+exclude =
+        .gitignore,
+        ./myvenv,
+        __pycache__,
+        .pytest_cashe,
+        iterators/Tree,
+        exchanger_scraper/exchanger_scraper/settings.py,
+        exchanger_scraper/exchanger_scraper/middlewares.py
+        
+ignore = 
+        F811,
+        W503
+max-line-length = 120
