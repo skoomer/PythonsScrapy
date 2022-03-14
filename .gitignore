@@ -26,3 +26,5 @@ tasks.txt
 exchanger_scraper/connect_db.py
 exchanger_scraper/model_base.py
 exchanger-markets.html
+exchanger.json
+
