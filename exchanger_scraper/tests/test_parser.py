@@ -1,5 +1,4 @@
 import unittest
-import json
 from scrapy.selector import Selector
 from exchanger_scraper.connect_db import ConnectDB
 from exchanger_scraper.create_table import ExchangeCurrency
@@ -18,7 +17,6 @@ class TestParsers(unittest.TestCase):
         self.html = Selector(text=open("exchanger-markets.html", "r").read())
         self.cursor = ConnectDB._get_cursor()
         self.exchanger = ExchangeCurrency()
-        self.static_data_json = open("exchanger.json")
 
     def _test_item_results(self, results, expected_length):
         list_item = []
@@ -32,22 +30,16 @@ class TestParsers(unittest.TestCase):
         self._test_item_results(results, 34)
 
     def test_check_valid_values_save_to_db(self):
+        item = {
+            "digital_code": ["933"],
+            "alphabetic_code": ["BYN"],
+            "number_of_currency_units": ["1"],
+            "currency_name": ["Білоруський рубль"],
+            "official_rate": ["10,9628"],
+        }
         self.exchanger.create_table()
-        val_str = ""
-        for key, value in json.load(self.static_data_json).items():
-            for i in value:
-                if key == "digital_code":
-                    self.exchanger.digital_code = int(val_str.join(i))
-                elif key == "alphabetic_code":
-                    self.exchanger.alphabetic_code = val_str.join(i)
-                elif key == "number_of_currency_units":
-                    self.exchanger.number_of_currency_units = int(val_str.join(i))
-                elif key == "currency_name":
-                    self.exchanger.currency_name = val_str.join(i)
-                elif key == "official_rate":
-                    for i in value:
-                        self.exchanger.official_rate = float(i.replace(",", "."))
-        self.exchanger.save()
+        self.pipeline.open_spider(self.spider)
+        self.pipeline.process_item(item, self.spider)
         query = "SELECT count(*) FROM exchangecurrency;"
         self.cursor.execute(query)
         for row in self.cursor:
